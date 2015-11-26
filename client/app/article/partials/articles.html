@@ -1,0 +1,33 @@
+<header class="intro-header" style="background-image: url('http://lorempixel.com/500/1000')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <div class="site-heading">
+          <h1>Photo Blog</h1>
+          <hr class="small">
+          <span class="subheading">An illustrated blog on photography</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div ng-repeat="article in vm.articles" class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <div class="post-preview">
+        <a ui-sref="articlesEdit({id: article.id})">
+          <h2 class="post-title">
+            {{article.title}}
+          </h2>
+          <h3 class="post-subtitle">
+            {{article.summary}}
+          </h3>
+        </a>
+        <p class="post-meta">Posted by <a href="#">Author Athor</a> on September 24, 2014</p>
+      </div>
+
+
+    </div>
+  </div>
+</div>

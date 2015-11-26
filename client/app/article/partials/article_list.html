@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <table class="table table-hover table-bordered table-striped"
+      <thead>
+        <tr>
+          <th>
+            Title
+          </th>
+          <th>
+            Summary
+          </th>
+          <th>
+            Create At
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+        <tr ng-repeat="article in vm.articles">
+          <td data-title="title">
+            {{article.title}}
+          </td>
+          <td data-title="summary">
+            {{article.summary}}
+          </td>
+          <td data-title="createAt">
+            {{article.createdAt}}
+          </td>
+
+        </tr>
+  </tbody>
+</table>
