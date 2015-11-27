@@ -14,12 +14,21 @@
     var vm = this;
     vm.id = $stateParams.id;
     vm.article = {};
+    vm.date = '';
 
     if (vm.id !== undefined) {
       Article.get({
         id: vm.id
       }, function(data) {
+        var date = null;
+        var options = {
+          weekday: "long", year: "numeric", month: "short",
+          day: "numeric", hour: "2-digit", minute: "2-digit"
+        };
         vm.article = data;
+        date = new Date(vm.article.createdAt);
+        vm.date = date.toLocaleTimeString("en-us", options);
+
         console.log("Found article: " + vm.article);
         console.log("Found article: " + JSON.stringify(data));
       });

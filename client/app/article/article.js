@@ -37,7 +37,7 @@ angular.module('photoblogApp')
           }
         }
       })
-      .state('article/:id', {
+      .state('articleView', {
         url: '/article/:id',
         templateUrl: 'app/article/partials/article.html',
         controller: 'ViewArticleController',

@@ -10,9 +10,9 @@ var ArticleSchema = new Schema({
   comments: [{
 
     comment: String,
-    createdAt: Date()
-  }]
-  createdAt: Date()
+    createdAt: { type: Date, default: Date.now },
+  }],
+  createdAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Article', ArticleSchema);
