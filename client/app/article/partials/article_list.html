@@ -1,33 +1,40 @@
 <div class="container">
   <div class="row">
-    <table class="table table-hover table-bordered table-striped"
-      <thead>
-        <tr>
-          <th>
-            Title
-          </th>
-          <th>
-            Summary
-          </th>
-          <th>
-            Create At
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+    <table <thead class="table table-hover table-bordered table-striped">
+      <tr>
+        <th>
+          Title
+        </th>
+        <th>
+          Summary
+        </th>
+        <th>
+          Created At
+        </th>
+        <th>
 
-      </tbody>
-        <tr ng-repeat="article in vm.articles">
-          <td data-title="title">
-            {{article.title}}
-          </td>
-          <td data-title="summary">
-            {{article.summary}}
-          </td>
-          <td data-title="createAt">
-            {{article.createdAt}}
-          </td>
+        </th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+      <tr ng-repeat="article in vm.articles">
+        <td data-title="title">
+          {{article.title}}
+        </td>
+        <td data-title="summary">
+          {{article.summary}}
+        </td>
+        <td data-title="createdAt">
+          {{article.createdAt}}
+        </td>
+        <td>
+          <button type="button" class="btn btn-primary" title="Edit" ng-click="vm.toEditArticle(article._id) "><span class="glyphicon glyphicon-pencil"></span></button>
+          <button type="button" class="btn btn-primary" title="Hide"><span class="glyphicon glyphicon-eye-close"></span></button>
+          <button type="button" class="btn btn-primary" title="Delete" ng-click="vm.remove(article._id) "><span class="glyphicon glyphicon-remove"></span></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-        </tr>
-  </tbody>
-</table>
+</row>
+</div>

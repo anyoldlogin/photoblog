@@ -9,7 +9,7 @@
     function MainController(Article) {
       var vm = this;
       vm.articles = Article.query();
-      console.log("Found " + vm.articles.length + " article.");
+
 
     };
 })();

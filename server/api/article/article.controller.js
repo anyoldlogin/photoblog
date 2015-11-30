@@ -5,6 +5,7 @@ var Article = require('./article.model');
 
 // Get list of articles
 exports.index = function(req, res) {
+  console.log("in index");
   Article.find(function (err, articles) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(articles);
@@ -14,8 +15,14 @@ exports.index = function(req, res) {
 // Get a single article
 exports.show = function(req, res) {
   Article.findById(req.params.id, function (err, article) {
+    console.log("in show");
     if(err) { return handleError(res, err); }
-    if(!article) { return res.status(404).send('Not Found'); }
+    if(!article) {
+      return res.status(404).send('Not Found');
+    }
+    else {
+      console.log("got:" + JSON.stringify(article));
+    }
     return res.json(article);
   });
 };

@@ -10,20 +10,32 @@ angular.module('photoblogApp', [
   'ui.bootstrap',
   'formly',
   'formlyBootstrap',
+  'restangular'
 
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
     $urlRouterProvider
       .when('/', '/articles')
       .otherwise("/articles");
 
+    RestangularProvider.setBaseUrl('/api/');
+    RestangularProvider.setRestangularFields({
+      id: "_id",
+    });
+
     $stateProvider
-      .state('/main', {
-        url: '/main',
-        templateUrl: 'app/main/partials/main.html',
-        controller: 'MainController',
-        controllerAs: 'vm'
-      })
+    .state('articles', {
+      url: '/articles',
+      templateUrl: 'app/article/partials/articles.html',
+      controller: 'ArticleController',
+      controllerAs: 'vm'
+    })
+    .state('article', {
+      url: '/article/:id',
+      templateUrl: 'app/article/partials/post.html',
+      controller: 'ViewArticleController',
+      controllerAs: 'vm'
+    })
       .state('about', {
         url: '/about',
         templateUrl: '/app/main/partials/about.html'

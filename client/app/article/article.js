@@ -3,12 +3,6 @@
 angular.module('photoblogApp')
   .config(function ($stateProvider) {
     $stateProvider
-      .state('articles', {
-        url: '/articles',
-        templateUrl: 'app/article/partials/articles.html',
-        controller: 'ArticleController',
-        controllerAs: 'vm'
-      })
       .state('articlesList', {
         url: '/listarticles',
         templateUrl: 'app/article/partials/article_list.html',

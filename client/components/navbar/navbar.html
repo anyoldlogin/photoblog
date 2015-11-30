@@ -14,7 +14,8 @@
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
             <a ui-sref="{{item.link}}">{{item.title}}</a>
         </li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
+        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">User Admin</a></li>
+        <li ng-show="isAdmin()" ng-class="{active: isActive('/listarticles')}"><a href="/listarticles">Post Admin</a></li>
       </ul>
 
       <ul class="nav navbar-nav navbar-right">

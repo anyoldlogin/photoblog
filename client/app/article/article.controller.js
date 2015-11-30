@@ -3,41 +3,42 @@
 
   angular.module('photoblogApp')
     .controller('ArticleController', ArticleController)
-    .controller('ViewArticleController', ViewArticleController);
+    .controller('ViewArticleController', ViewArticleController)
+
   //.controller('ArticleController', ArticleListController)
   //.controller('ArticleController', NewArticleController)
   //.controller('ArticleController', EditArticleController);
 
-  ViewArticleController.$inject = ['Article','$stateParams'];
+  ViewArticleController.$inject = ['Article', '$stateParams', '$location'];
 
-  function ViewArticleController(Article, $stateParams) {
+  function ViewArticleController(Article, $stateParams, $location) {
     var vm = this;
     vm.id = $stateParams.id;
     vm.article = {};
     vm.date = '';
 
+
     if (vm.id !== undefined) {
-      Article.get({
-        id: vm.id
-      }, function(data) {
+      Article.one(vm.id).get().then(function(data) {
         var date = null;
         var options = {
-          weekday: "long", year: "numeric", month: "short",
-          day: "numeric", hour: "2-digit", minute: "2-digit"
+          weekday: "long",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
         };
         vm.article = data;
         date = new Date(vm.article.createdAt);
         vm.date = date.toLocaleTimeString("en-us", options);
-
-        console.log("Found article: " + vm.article);
-        console.log("Found article: " + JSON.stringify(data));
       });
     }
   }
 
   ArticleController.$inject = ['Article', '$stateParams', '$location', '$log']
 
-  function ArticleController(Article, $stateParams, $location, $log, action) {
+  function ArticleController(Article, $stateParams, $location, $log) {
     var vm = this;
     vm.id = $stateParams.id;
     vm.article = {};
@@ -45,51 +46,54 @@
     vm.articles = [];
 
 
-    console.log("id: " + vm.id);
     if (vm.id !== undefined) {
-      Article.get({
-        id: vm.id
-      }, function(data) {
+      Article.one(vm.id).get().then(function(data) {
         vm.article = data;
       });
+    } else {
+      Article.getList().then(function(data) {
+        vm.articles = data;
+        console.log('articles:' + JSON.stringify(vm.articles));
+        vm.gridOptions = {
+          enableSorting: true,
+          columnDefs: vm.columns,
+          data: vm.articles
+        };
+      });
     }
-    else {
-      vm.articles = Article.query();
-    }
+
+
 
     vm.articleFields = [{
-        key: 'title',
-        type: 'input',
-        templateOptions: {
-          type: 'text',
-          label: 'Title',
-          placeHolder: 'Enter the title of the article',
-          required: true
-        }
-      }, {
-        key: 'summary',
-        type: 'input',
-        templateOptions: {
-          type: 'text',
-          label: 'Summary',
-          placeHolder: 'Enter a synopsis of the article',
-          required: true
-        }
-      }, {
-        key: 'content',
-        type: 'textarea',
-        templateOptions: {
-          type: 'text',
-          label: 'Summary',
-          placeHolder: 'Enter a synopsis of the article',
-          required: true
-        }
+      key: 'title',
+      type: 'input',
+      templateOptions: {
+        type: 'text',
+        label: 'Title',
+        placeHolder: 'Enter the title of the article',
+        required: true
       }
+    }, {
+      key: 'summary',
+      type: 'input',
+      templateOptions: {
+        type: 'text',
+        label: 'Summary',
+        placeHolder: 'Enter a synopsis of the article',
+        required: true
+      }
+    }, {
+      key: 'content',
+      type: 'textarea',
+      templateOptions: {
+        type: 'text',
+        label: 'Summary',
+        placeHolder: 'Enter a synopsis of the article',
+        required: true
+      }
+    }];
 
-    ];
 
-
-    // create new Article
     vm.create = function() {
         // Create new Article object
         var article = new Article(vm.article);
@@ -103,25 +107,9 @@
         });
       }
       // Remove existing Article
-    vm.remove = function(article) {
-
-      if (article) {
-        article = Article.get({
-          id: article.id
-        }, function() {
-          article.$remove(function() {
-            $log.debug('Article deleted');
-            // vm.tableParams.reload();
-          });
-        });
-      } else {
-        vm.article.$remove(function() {
-          $log.debug('Article deleted');
-          $location.path('/article');
-        });
-      }
-
-    };
+    vm.remove = function(id) {
+      article = Article.get(id);
+    }
 
     // Update existing Article
     vm.update = function() {
@@ -142,12 +130,15 @@
       vm.setFormFields(true);
     };
 
-    vm.toEditArticle = function() {
-      vm.article = Article.get({
-        articleId: $stateParams.articleId
-      });
-      vm.setFormFields(false);
+    vm.toEditArticle = function(id) {
+      console.log('edit clicked');
+      $location.path('article/' + id + '/view');
     };
+
+
+
+    // create new Article
+
 
   }
 })();
