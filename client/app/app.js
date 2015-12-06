@@ -10,7 +10,8 @@ angular.module('photoblogApp', [
   'ui.bootstrap',
   'formly',
   'formlyBootstrap',
-  'restangular'
+  'restangular',
+  'angularUtils.directives.dirPagination'
 
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {

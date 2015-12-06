@@ -1,6 +1,12 @@
 <div class="container">
   <div class="row">
-    <a  class="pull-right"ui-sref="articlesNew"><span>Post New Article</span></a>
+    <a class="pull-right" ui-sref="articlesNew">
+      <span>Post New Article</span>
+    </a>
+  </div>
+  <div class="row">
+    <label for="search">Search:</label>
+    <input ng-model="vm.filter" id="search" class="form-control" placeholder="Filter text">
   </div>
   <div class="row">
     <table <thead class="table table-hover table-bordered table-striped">
@@ -14,13 +20,11 @@
         <th>
           Created At
         </th>
-        <th>
-
-        </th>
+        <th></th>
       </tr>
     </thead>
-    <tbody></tbody>
-      <tr ng-repeat="article in vm.articles">
+    <tbody>
+      <tr dir-paginate="article in vm.articles | filter: vm.filter | itemsPerPage: 5">
         <td data-title="title">
           {{article.title}}
         </td>
@@ -31,13 +35,25 @@
           {{article.createdAt | date: 'MM/dd/yyyy @ h:mma'}}
         </td>
         <td>
-          <button type="button" class="btn btn-primary" title="Edit" ng-click="vm.toEditArticle(article._id) "><span class="glyphicon glyphicon-pencil pull-right"></span></button>
-          <button type="button" class="btn btn-primary" title="Hide"><span class="glyphicon glyphicon-eye-close pull-right"></span></button>
-          <button type="button" class="btn btn-primary" title="Delete" ng-click="vm.remove(article._id) "><span class="glyphicon glyphicon-trash pull-right"></span></span></button>
+          <button class="btn btn-primary" ng-click="vm.toEditArticle(article._id) " title="Edit" type="button">
+            <span class="glyphicon glyphicon-pencil pull-right"></span>
+          </button>
+          <button class="btn btn-primary" title="Hide" type="button">
+            <span class="glyphicon glyphicon-eye-close pull-right"></span>
+          </button>
+          <button class="btn btn-primary" ng-click="vm.remove(article._id) " title="Delete" type="button">
+            <span class="glyphicon glyphicon-trash pull-right"></span>
+          </button>
         </td>
       </tr>
     </tbody>
+
   </table>
 
+</div>
+<row>
+  <div class="container center-block">
+    <dir-pagination-controls></dir-pagination-controls>
+  </div>
 </row>
 </div>

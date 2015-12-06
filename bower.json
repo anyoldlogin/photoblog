@@ -19,7 +19,8 @@
     "angular-formly": "~7.3.4",
     "ui-navbar": "~0.4.1",
     "restangular": "~1.5.1",
-    "tether": "~1.1.1"
+    "tether": "~1.1.1",
+    "angularUtils-pagination": "angular-utils-pagination#~0.9.2"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
