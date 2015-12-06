@@ -138,7 +138,7 @@
     vm.error = null;
     vm.articles = [];
     vm.articleFields = articleFields;
-
+    vm.pageSize = 5;
 
     if (vm.id !== undefined) {
       Article.one(vm.id).get().then(function(data) {
