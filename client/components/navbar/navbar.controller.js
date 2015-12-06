@@ -1,17 +1,19 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('photoblogApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
-    $scope.menu = [
-      {
-        'title': 'Home',
-        'link': 'main'
-      },
-      {
-        'title': 'About',
-        'link': 'about'
-      }
-    ];
+  angular.module('photoblogApp')
+    .controller('NavbarCtrl', NavbarCtrl);
+
+  NavbarCtrl.$inject = ['$scope', '$location', 'Auth'];
+
+  function NavbarCtrl($scope, $location, Auth) {
+    $scope.menu = [{
+      'title': 'Home',
+      'link': 'main'
+    }, {
+      'title': 'About',
+      'link': 'about'
+    }];
 
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn;
@@ -26,4 +28,5 @@ angular.module('photoblogApp')
     $scope.isActive = function(route) {
       return route === $location.path();
     };
-  });
+  };
+})();

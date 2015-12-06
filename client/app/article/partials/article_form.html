@@ -1,8 +1,9 @@
 <div class="container col-md-4 col-md-offset-4">
-<form data-ng-submit="vm.create()" novalidate>
+<form data-ng-submit="vm.task()" novalidate>
   <h1>Article</h1>
   <formly-form model="vm.article" fields="vm.articleFields" form="vm.articleForm">
     <button type="submit" class="btn btn-primary" ng-disabled="vm.articleForm.$invalid">Submit</button>
   </formly-form>
 </form>
+
 </div>

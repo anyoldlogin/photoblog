@@ -4,34 +4,127 @@
   angular.module('photoblogApp')
     .controller('ArticleController', ArticleController)
     .controller('ViewArticleController', ViewArticleController)
+    .controller('NewArticleController', NewArticleController)
+    .controller('EditArticleController', EditArticleController);
 
   //.controller('ArticleController', ArticleListController)
   //.controller('ArticleController', NewArticleController)
   //.controller('ArticleController', EditArticleController);
+  var articleFields = [{
+    key: 'title',
+    type: 'input',
+    templateOptions: {
+      type: 'text',
+      label: 'Title',
+      placeHolder: 'Enter the title of the article',
+      required: true
+    }
+  }, {
+    key: 'summary',
+    type: 'input',
+    templateOptions: {
+      type: 'text',
+      label: 'Summary',
+      placeHolder: 'Enter a synopsis of the article',
+      required: true
+    }
+  }, {
+    key: 'content',
+    type: 'textarea',
+    templateOptions: {
+      type: 'text',
+      label: 'Summary',
+      placeHolder: 'Enter a synopsis of the article',
+      required: true
+    }
+  }];
 
-  ViewArticleController.$inject = ['Article', '$stateParams', '$location'];
 
-  function ViewArticleController(Article, $stateParams, $location) {
+
+  function formatDate(date) {
     var vm = this;
+
+    var formatedDate = {}
+    var options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    formatedDate = date.toLocaleTimeString('en-us', options);
+    return formatedDate;
+  }
+
+  NewArticleController.$inject = ['Article',  '$location', '$log']
+
+  function NewArticleController(Article,  $location, $log) {
+      console.log('In NewArticleController');
+    var vm = this;
+    vm.article = {};
+    vm.articleFields = articleFields;
+
+    vm.task = function create() {
+        Article.post(vm.article).then(function(article) {
+          $location.path('/article/' + article._id);
+        });
+
+    }
+  }
+
+  EditArticleController.$inject = ['Article', '$stateParams', '$location', 'Auth'];
+
+  function EditArticleController(Article, $stateParams, $location, Auth) {
+      console.log('In EditArticleController');
+    var vm = this;
+
+    vm.isEdit = true;
+    vm.isAdmin = Auth.isAdmin;
     vm.id = $stateParams.id;
     vm.article = {};
-    vm.date = '';
+    vm.date = {};
+    vm.articleFields = articleFields;
 
+
+    vm.task = function update() {
+      vm.article.put().then(function() {
+        $location.path('/article/' + vm.article._id);
+      });
+    };
 
     if (vm.id !== undefined) {
       Article.one(vm.id).get().then(function(data) {
         var date = null;
-        var options = {
-          weekday: "long",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit"
-        };
+
         vm.article = data;
+
         date = new Date(vm.article.createdAt);
-        vm.date = date.toLocaleTimeString("en-us", options);
+        console.log("date:" + JSON.stringify(date));
+        vm.date = formatDate(date);
+      });
+    }
+
+  }
+
+  ViewArticleController.$inject = ['Article', '$stateParams', '$location', 'Auth'];
+
+  function ViewArticleController(Article, $stateParams, $location, Auth) {
+    console.log('In ViewArticleController');
+    var vm = this;
+    vm.isEdit = false;
+    vm.id = $stateParams.id;
+    vm.article = {};
+    vm.date = '';
+    vm.isAdmin = true; //Auth.isAdmin();
+
+    if (vm.id !== undefined) {
+      Article.one(vm.id).get().then(function(data) {
+        var d = {};
+        vm.article = data;
+        d = new Date(vm.article.createdAt);
+        console.log('Date:' + d);
+        vm.date = formatDate(d);
       });
     }
   }
@@ -44,6 +137,7 @@
     vm.article = {};
     vm.error = null;
     vm.articles = [];
+    vm.articleFields = articleFields;
 
 
     if (vm.id !== undefined) {
@@ -53,7 +147,6 @@
     } else {
       Article.getList().then(function(data) {
         vm.articles = data;
-        console.log('articles:' + JSON.stringify(vm.articles));
         vm.gridOptions = {
           enableSorting: true,
           columnDefs: vm.columns,
@@ -64,34 +157,7 @@
 
 
 
-    vm.articleFields = [{
-      key: 'title',
-      type: 'input',
-      templateOptions: {
-        type: 'text',
-        label: 'Title',
-        placeHolder: 'Enter the title of the article',
-        required: true
-      }
-    }, {
-      key: 'summary',
-      type: 'input',
-      templateOptions: {
-        type: 'text',
-        label: 'Summary',
-        placeHolder: 'Enter a synopsis of the article',
-        required: true
-      }
-    }, {
-      key: 'content',
-      type: 'textarea',
-      templateOptions: {
-        type: 'text',
-        label: 'Summary',
-        placeHolder: 'Enter a synopsis of the article',
-        required: true
-      }
-    }];
+
 
 
     vm.create = function() {
@@ -100,7 +166,6 @@
 
         // Redirect after save
         article.$save(function(response) {
-          $log.debug('Article created');
           $location.path('article/' + response.id);
         }, function(errorResponse) {
           vm.error = errorResponse.data.summary;
@@ -108,7 +173,17 @@
       }
       // Remove existing Article
     vm.remove = function(id) {
-      article = Article.get(id);
+      var article = {};
+
+      Article.one(id).get().then(function(data) {
+        article = data;
+        console.log("In remove: " + JSON.stringify(article));
+
+
+        vm.articles = _.without(vm.articles, article);
+        article.remove();
+      });
+
     }
 
     // Update existing Article
@@ -141,4 +216,7 @@
 
 
   }
+
+
+
 })();

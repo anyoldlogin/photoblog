@@ -1,5 +1,8 @@
 <div class="container">
   <div class="row">
+    <a  class="pull-right"ui-sref="articlesNew"><span>Post New Article</span></a>
+  </div>
+  <div class="row">
     <table <thead class="table table-hover table-bordered table-striped">
       <tr>
         <th>
@@ -25,12 +28,12 @@
           {{article.summary}}
         </td>
         <td data-title="createdAt">
-          {{article.createdAt}}
+          {{article.createdAt | date: 'MM/dd/yyyy @ h:mma'}}
         </td>
         <td>
-          <button type="button" class="btn btn-primary" title="Edit" ng-click="vm.toEditArticle(article._id) "><span class="glyphicon glyphicon-pencil"></span></button>
-          <button type="button" class="btn btn-primary" title="Hide"><span class="glyphicon glyphicon-eye-close"></span></button>
-          <button type="button" class="btn btn-primary" title="Delete" ng-click="vm.remove(article._id) "><span class="glyphicon glyphicon-remove"></span></button>
+          <button type="button" class="btn btn-primary" title="Edit" ng-click="vm.toEditArticle(article._id) "><span class="glyphicon glyphicon-pencil pull-right"></span></button>
+          <button type="button" class="btn btn-primary" title="Hide"><span class="glyphicon glyphicon-eye-close pull-right"></span></button>
+          <button type="button" class="btn btn-primary" title="Delete" ng-click="vm.remove(article._id) "><span class="glyphicon glyphicon-trash pull-right"></span></span></button>
         </td>
       </tr>
     </tbody>

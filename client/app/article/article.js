@@ -12,7 +12,7 @@ angular.module('photoblogApp')
       .state('articlesEdit', {
         url: '/article/:id/view',
         templateUrl: 'app/article/partials/article_form.html',
-        controller: 'ArticleController',
+        controller: 'EditArticleController',
         controllerAs: 'vm',
         resolve: {
           action: function() {
@@ -21,9 +21,9 @@ angular.module('photoblogApp')
         }
       })
       .state('articlesNew', {
-        url: '/article/new',
+        url: '/articles/new',
         templateUrl: 'app/article/partials/article_form.html',
-        controller: 'ArticleController',
+        controller: 'NewArticleController',
         controllerAs: 'vm',
         resolve: {
           action: function() {
