@@ -149,7 +149,7 @@
         vm.article = data;
       });
     } else {
-      Article.getList().then(function(data) {
+      Article.getList({'isHidden' : true}).then(function(data) {
         vm.articles = data;
         vm.gridOptions = {
           enableSorting: true,
@@ -159,10 +159,17 @@
       });
     }
 
+    vm.setVisible = function(article) {
+      article.isHidden = false;
+      article.save(); //post(article);
 
+    }
 
+    vm.setHidden = function(article) {
+      article.isHidden = true;
+      article.save();//post(article);
 
-
+    }
 
     vm.create = function() {
         // Create new Article object
@@ -198,24 +205,6 @@
         vm.error = errorResponse.data.summary;
       });
     };
-
-    vm.toViewArticle = function() {
-      vm.article = Article.get({
-        articleId: $stateParams.articleId
-      });
-      vm.setFormFields(true);
-    };
-
-    vm.toEditArticle = function(id) {
-      console.log('edit clicked');
-      $location.path('article/' + id + '/view');
-    };
-
-
-
-    // create new Article
-
-
   }
 
 

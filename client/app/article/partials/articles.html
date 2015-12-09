@@ -15,7 +15,7 @@
 <div class="container">
   <div class="row">
     <div ng-repeat="article in vm.articles" class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-      <div class="post-preview">
+      <div class="post-preview" ng-hide="!article.isHidden">
         <a ui-sref="articleView({id: article._id})">
           <h2 class="post-title">
             {{article.title}}

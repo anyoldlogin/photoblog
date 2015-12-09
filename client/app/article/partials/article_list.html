@@ -46,8 +46,11 @@
             <button class="btn btn-primary" ng-click="vm.toEditArticle(article._id) " title="Edit" type="button">
               <span class="glyphicon glyphicon-pencil pull-right"></span>
             </button>
-            <button class="btn btn-primary" title="Hide" type="button">
+            <button ng-if="article.isHidden" ng-click="vm.setVisible(article)" class="btn btn-primary animate-if" title="Show" type="button">
               <span class="glyphicon glyphicon-eye-close pull-right"></span>
+            </button>
+            <button ng-if="!article.isHidden" ng-click="vm.setHidden(article)" class="btn btn-primary animate-if" title="Hide" type="button">
+              <span class="glyphicon glyphicon-eye-open pull-right"></span>
             </button>
             <button class="btn btn-primary" ng-click="vm.remove($index, article._id) " title="Delete" type="button">
               <span class="glyphicon glyphicon-trash pull-right"></span>

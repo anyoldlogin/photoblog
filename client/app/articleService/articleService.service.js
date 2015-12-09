@@ -7,7 +7,12 @@ angular.module('photoblogApp')
   Article.inject = ['Restangular'];
 
   function Article(Restangular) {
-    var  factory = Restangular.service('articles');
+    var service = Restangular.service('articles');
+    var  factory = {
+      one: service.one,
+      getList: service.getList,
+      
+    }
 
     return factory;
   }
