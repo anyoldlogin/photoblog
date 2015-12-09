@@ -44,7 +44,7 @@
   function formatDate(date) {
     var vm = this;
 
-    var formatedDate = {}
+    var formatedDate = {};
     var options = {
       weekday: 'long',
       year: 'numeric',
@@ -57,16 +57,20 @@
     return formatedDate;
   }
 
-  NewArticleController.$inject = ['Article',  '$location', '$log']
+  NewArticleController.$inject = ['Article',  '$location', '$log', 'Auth'];
 
-  function NewArticleController(Article,  $location, $log) {
+  function NewArticleController(Article,  $location, $log, Auth) {
       console.log('In NewArticleController');
     var vm = this;
     vm.article = {};
     vm.articleFields = articleFields;
+    vm.author = Auth.getCurrentUser();
+    console.log("Author: " + JSON.stringify(vm.author));
+    vm.article.author = vm.author._id;
 
     vm.task = function create() {
         Article.post(vm.article).then(function(article) {
+          console.log("Article: " + JSON.stringify(article));
           $location.path('/article/' + article._id);
         });
 
@@ -172,15 +176,12 @@
         });
       }
       // Remove existing Article
-    vm.remove = function(id) {
+    vm.remove = function(index, id) {
       var article = {};
 
       Article.one(id).get().then(function(data) {
         article = data;
-        console.log("In remove: " + JSON.stringify(article));
-
-
-        vm.articles = _.without(vm.articles, article);
+        vm.articles.splice(index, 1);
         article.remove();
       });
 

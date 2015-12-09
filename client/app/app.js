@@ -11,17 +11,18 @@ angular.module('photoblogApp', [
   'formly',
   'formlyBootstrap',
   'restangular',
-  'angularUtils.directives.dirPagination'
+  'angularUtils.directives.dirPagination',
+  'ui.bootstrap'
 
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
     $urlRouterProvider
       .when('/', '/articles')
-      .otherwise("/articles");
+      .otherwise('/articles');
 
     RestangularProvider.setBaseUrl('/api/');
     RestangularProvider.setRestangularFields({
-      id: "_id",
+      id: '_id',
     });
 
     $stateProvider

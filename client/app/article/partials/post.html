@@ -18,7 +18,7 @@
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                   <h1>{{vm.article.title}}</h1>
                   <h2 class="subheading">{{vm.article.summary}}</h2>
-                  <span class="meta">Posted by <a href="#">Start Bootstrap</a> on {{vm.date}}</span>
+                  <span class="meta">Posted by <a href="#">{{vm.article.author.name}}</a> on {{vm.date}}</span>
                   <div ng-show="vm.isAdmin">
                     <button type="button" class="btn btn-primary" title="Edit" ng-click="vm.toEditArticle(article._id) "><span class="glyphicon glyphicon-pencil"></span></button>
                     <button type="button" class="btn btn-primary" title="Hide"><span class="glyphicon glyphicon-eye-close"></span></button>
