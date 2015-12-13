@@ -120,7 +120,35 @@
     vm.id = $stateParams.id;
     vm.article = {};
     vm.date = '';
-    vm.isAdmin = true; //Auth.isAdmin();
+    vm.isAdmin = Auth.isAdmin();
+    vm.myInterval = 5000;
+    vm.noWrapSlides = false;
+    vm.slides = [
+      {
+        image: 'http://lorempixel.com/1000/1000',
+        text: 'Picture 1'
+      },
+      {
+        image: 'http://lorempixel.com/1000/1000',
+        text: 'Picture 2'
+      },
+      {
+        image: 'http://lorempixel.com/1000/1000',
+        text: 'Picture 3'
+      },
+      {
+        image: 'http://lorempixel.com/1000/1000',
+        text: 'Picture 4'
+      },
+      {
+        image: 'http://lorempixel.com/1000/1000',
+        text: 'Picture 5'
+      },
+      {
+        image: 'http://lorempixel.com/1000/1000',
+        text: 'Picture 6'
+      }
+    ];
 
     if (vm.id !== undefined) {
       Article.one(vm.id).get().then(function(data) {

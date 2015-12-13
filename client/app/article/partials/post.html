@@ -1,36 +1,46 @@
-<header class="intro-header" style="background-image: url('http://lorempixel.com/500/1000')">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="post-heading">
+<div class="row">
+  <div class="col-md-12">
+      <carousel  interval="vm.myInterval">
+        <slide   ng-non-bindable ng-repeat="slide in vm.slides" active="slide.active" ng-animate="false">
+          <img ng-src="{{slide.image}}?{{$index}}" style="margin:auto;">
+          <div class="carousel-caption">
+            <h4>Slide {{$index}}</h4>
+            <p>{{slide.text}}</p>
+          </div>
+        </slide>
+    </carousel>
+  </div>
+  </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- Post Contenvt -->
+<!-- Post Contenvt -->
     <article>
-        <div class="container">
-          <h1>Post.html</h1>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                  <h1>{{vm.article.title}}</h1>
-                  <h2 class="subheading">{{vm.article.summary}}</h2>
-                  <span class="meta">Posted by <a href="#">{{vm.article.author.name}}</a> on {{vm.date}}</span>
-                  <div ng-show="vm.isAdmin">
-                    <button type="button" class="btn btn-primary" title="Edit" ng-click="vm.toEditArticle(article._id) "><span class="glyphicon glyphicon-pencil"></span></button>
-                    <button type="button" class="btn btn-primary" title="Hide"><span class="glyphicon glyphicon-eye-close"></span></button>
-                    <button type="button" class="btn btn-primary" title="Delete" ng-click="vm.remove(article._id) "><span class="glyphicon glyphicon-remove"></span></button>
-                  </div>
-                  <p>
-                    {{vm.article.content}}
-                  </p>
+  <div class="container">
 
-
-
-                </div>
-            </div>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <h1>{{vm.article.title}}</h1>
+        <h2 class="subheading">{{vm.article.summary}}</h2>
+        <span class="meta">Posted by
+          <a href="#">{{vm.article.author.name}}</a>
+          on
+          {{vm.date}}</span>
+        <div ng-show="vm.isAdmin">
+          <button class="btn btn-primary" ng-click="vm.toEditArticle(article._id) " title="Edit" type="button">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </button>
+          <button class="btn btn-primary" title="Hide" type="button">
+            <span class="glyphicon glyphicon-eye-close"></span>
+          </button>
+          <button class="btn btn-primary" ng-click="vm.remove(article._id) " title="Delete" type="button">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
         </div>
-    </article>
+        <p>
+          {{vm.article.content}}
+        </p>
+
+      </div>
+    </div>
+  </div>
+</article>

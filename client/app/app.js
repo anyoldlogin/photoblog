@@ -5,14 +5,14 @@ angular.module('photoblogApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngAnimate',
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
   'formly',
   'formlyBootstrap',
   'restangular',
-  'angularUtils.directives.dirPagination',
-  'ui.bootstrap'
+  'angularUtils.directives.dirPagination'
 
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
