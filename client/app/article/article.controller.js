@@ -199,6 +199,11 @@
 
     }
 
+    vm.editArticle = function(id) {
+      console.log('in edit article');
+        $location.path('article/' + id + '/view');
+    }
+
     vm.create = function() {
         // Create new Article object
         var article = new Article(vm.article);

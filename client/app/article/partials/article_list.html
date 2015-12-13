@@ -43,7 +43,7 @@
             {{article.createdAt | date: 'MM/dd/yyyy @ h:mma'}}
           </td>
           <td>
-            <button class="btn btn-primary" ng-click="vm.toEditArticle(article._id) " title="Edit" type="button">
+            <button class="btn btn-primary" ng-click="vm.editArticle(article._id) " title="Edit" type="button">
               <span class="glyphicon glyphicon-pencil pull-right"></span>
             </button>
             <button ng-if="article.isHidden" ng-click="vm.setVisible(article)" class="btn btn-primary animate-if" title="Show" type="button">
