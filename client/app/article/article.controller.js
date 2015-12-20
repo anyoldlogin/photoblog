@@ -135,23 +135,22 @@
         id = vm.article.uuid || uuid.generate();
       }
       else {
-        id: uuid.generate();
+        id = uuid.generate();
       }
+      console.log('uuid: ' + id);
       vm.files = files;
       console.log('files:  ' + JSON.stringify(vm.files));
       if (files && files.length) {
         Upload.upload({
           url: '/api/photos',
           data: {
-            files: vm.files
-          },
-          fields: {
+            files: vm.files,
             uuid: id
           }
         }).then(function(response) {
           $timeout(function() {
             vm.result = response.data;
-            console.log('data:  ' + JSON.stringify(vm.vm.result));
+            console.log('data:  ' + JSON.stringify(vm.result));
           });
         }, function(response) {
           if (response.status > 0) {

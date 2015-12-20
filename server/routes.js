@@ -3,25 +3,27 @@
  */
 
 'use strict';
-
+var _ = require('lodash');
 var errors = require('./components/errors');
 var path = require('path');
 var multer = require('multer');
-var fs = require('fs');
+var fs = require('fs-extra');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './client/assets/photos');
     },
     filename: function (req, file, cb) {
-      console.log('file: ' + JSON.stringify(file));
+      console.log('req.body: ' + JSON.stringify(req.body));
         cb(null, file.originalname);
   }
 });
 var upload = multer({storage: storage});
 
 module.exports = function(app) {
-
+  var id = '';
+  var photoPath = '';
   // Insert routes below
+  app.use('/api/photos', require('./api/photo'));
   app.use('/api/articles', require('./api/article'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
@@ -35,6 +37,24 @@ module.exports = function(app) {
     console.log('body:' + JSON.stringify(req.body));
     res.writeHead(200, { 'Connection': 'close' });
     res.end("");
+    id = req.body.uuid;
+    photoPath = req.files[0].destination + '\\' + id;
+    console.log('Path: ' + photoPath);
+
+    fs.mkdirs(photoPath, function(err) {
+      if (err) {
+        return console.error(err);
+      }
+
+    });
+    _.forEach(req.files, function(f) {
+      fs.move(f.path, f.destination + '\\' + id + '\\' + f.originalname, function(err) {
+        if (err) {
+          return console.error(err);
+        }
+      });
+    });
+
   });
 
   // All undefined asset or api routes should return a 404
