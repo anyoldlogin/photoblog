@@ -39,6 +39,32 @@
     }
   }];
 
+  var setVisible = function(article) {
+    article.isHidden = false;
+    article.save(); //post(article);
+
+  }
+
+  var setHidden = function(article) {
+    article.isHidden = true;
+    article.save(); //post(article);
+
+  }
+
+  // Remove existing Article
+  var remove = function(index, id) {
+    var article = {};
+
+    Article.one(id).get().then(function(data) {
+      article = data;
+      vm.articles.splice(index, 1);
+      article.remove();
+    });
+  }
+
+  var editArticle = function(id) {
+    $location.path('article/' + id + '/view');
+  }
 
 
   function formatDate(date) {
@@ -57,10 +83,10 @@
     return formatedDate;
   }
 
-  NewArticleController.$inject = ['Article',  '$location', '$log', 'Auth'];
+  NewArticleController.$inject = ['Article', '$location', '$log', 'Auth', 'Upload'];
 
-  function NewArticleController(Article,  $location, $log, Auth) {
-      console.log('In NewArticleController');
+  function NewArticleController(Article, $location, $log, Auth, Upload) {
+    console.log('In NewArticleController');
     var vm = this;
     vm.article = {};
     vm.articleFields = articleFields;
@@ -69,18 +95,18 @@
     vm.article.author = vm.author._id;
 
     vm.task = function create() {
-        Article.post(vm.article).then(function(article) {
-          console.log("Article: " + JSON.stringify(article));
-          $location.path('/article/' + article._id);
-        });
+      Article.post(vm.article).then(function(article) {
+        console.log("Article: " + JSON.stringify(article));
+        $location.path('/article/' + article._id);
+      });
 
     }
   }
 
-  EditArticleController.$inject = ['Article', '$stateParams', '$location', 'Auth'];
+  EditArticleController.$inject = ['Article', '$stateParams', '$location', 'Auth', 'Upload', '$timeout', 'uuid'];
 
-  function EditArticleController(Article, $stateParams, $location, Auth) {
-      console.log('In EditArticleController');
+  function EditArticleController(Article, $stateParams, $location, Auth, Upload, $timeout, uuid) {
+    console.log('In EditArticleController');
     var vm = this;
 
     vm.isEdit = true;
@@ -89,25 +115,97 @@
     vm.article = {};
     vm.date = {};
     vm.articleFields = articleFields;
+    vm.files = [];
+    vm.progress = 0;
+    vm.total = 0;
+    vm.errorMag = '';
+    vm.result = '';
 
 
+    vm.pattern = '.tif, .tiff, .gif, .jpeg, jpg, .jif, .jfif, .png';
     vm.task = function update() {
       vm.article.put().then(function() {
         $location.path('/article/' + vm.article._id);
       });
     };
 
+    vm.uploadFiles = function(files) {
+      var id = 0;
+      if(vm.article) {
+        id = vm.article.uuid || uuid.generate();
+      }
+      else {
+        id: uuid.generate();
+      }
+      vm.files = files;
+      console.log('files:  ' + JSON.stringify(vm.files));
+      if (files && files.length) {
+        Upload.upload({
+          url: '/api/photos',
+          data: {
+            files: vm.files
+          },
+          fields: {
+            uuid: id
+          }
+        }).then(function(response) {
+          $timeout(function() {
+            vm.result = response.data;
+            console.log('data:  ' + JSON.stringify(vm.vm.result));
+          });
+        }, function(response) {
+          if (response.status > 0) {
+            vm.errorMsg = response.status + ': ' + response.data;
+          }
+        }, function(evt) {
+          console.log('progress: ' + evt.loaded / evt.total);
+          vm.total = evt.total;
+          vm.progress =
+            Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        });
+      }
+    };
+    // upload on file select or drop
+    vm.upload = function(file) {
+      Upload.upload({
+        url: '/client/upload/',
+        data: {
+          file: file,
+          'username': $scope.username
+        }
+      }).then(function(resp) {
+        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      }, function(resp) {
+        console.log('Error status: ' + resp.status);
+      }, function(evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      });
+    };
+
+
     if (vm.id !== undefined) {
       Article.one(vm.id).get().then(function(data) {
         var date = null;
 
         vm.article = data;
-
+        console.log("article:" + JSON.stringify(vm.article));
         date = new Date(vm.article.createdAt);
         console.log("date:" + JSON.stringify(date));
         vm.date = formatDate(date);
       });
     }
+
+    // // for multiple files:
+    // vm.uploadFiles = function (files) {
+    //   if (files && files.length) {
+    //     for (var i = 0; i < files.length; i++) {
+    //       ;//Upload.upload({..., data: {file: files[i]}, ...})...;
+    //     }
+    //     // or send them all together for HTML5 browsers:
+    //     //Upload.upload({..., data: {file: files}, ...})...;
+    //   }
+    // }
 
   }
 
@@ -123,32 +221,29 @@
     vm.isAdmin = Auth.isAdmin();
     vm.myInterval = 5000;
     vm.noWrapSlides = false;
-    vm.slides = [
-      {
-        image: 'http://lorempixel.com/1000/1000',
-        text: 'Picture 1'
-      },
-      {
-        image: 'http://lorempixel.com/1000/1000',
-        text: 'Picture 2'
-      },
-      {
-        image: 'http://lorempixel.com/1000/1000',
-        text: 'Picture 3'
-      },
-      {
-        image: 'http://lorempixel.com/1000/1000',
-        text: 'Picture 4'
-      },
-      {
-        image: 'http://lorempixel.com/1000/1000',
-        text: 'Picture 5'
-      },
-      {
-        image: 'http://lorempixel.com/1000/1000',
-        text: 'Picture 6'
-      }
-    ];
+    vm.slides = [{
+      image: 'http://lorempixel.com/1000/1000',
+      text: 'Picture 1'
+    }, {
+      image: 'http://lorempixel.com/1000/1000',
+      text: 'Picture 2'
+    }, {
+      image: 'http://lorempixel.com/1000/1000',
+      text: 'Picture 3'
+    }, {
+      image: 'http://lorempixel.com/1000/1000',
+      text: 'Picture 4'
+    }, {
+      image: 'http://lorempixel.com/1000/1000',
+      text: 'Picture 5'
+    }, {
+      image: 'http://lorempixel.com/1000/1000',
+      text: 'Picture 6'
+    }];
+    vm.setVisible = setVisible;
+    vm.setHidden = setHidden;
+    vm.remove = remove;
+    vm.editArticle = editArticle;
 
     if (vm.id !== undefined) {
       Article.one(vm.id).get().then(function(data) {
@@ -171,13 +266,19 @@
     vm.articles = [];
     vm.articleFields = articleFields;
     vm.pageSize = 5;
+    vm.setVisible = setVisible;
+    vm.setHidden = setHidden;
+    vm.remove = remove;
+    vm.editArticle = editArticle;
 
     if (vm.id !== undefined) {
       Article.one(vm.id).get().then(function(data) {
         vm.article = data;
       });
     } else {
-      Article.getList({'isHidden' : true}).then(function(data) {
+      Article.getList({
+        'isHidden': true
+      }).then(function(data) {
         vm.articles = data;
         vm.gridOptions = {
           enableSorting: true,
@@ -187,45 +288,23 @@
       });
     }
 
-    vm.setVisible = function(article) {
-      article.isHidden = false;
-      article.save(); //post(article);
 
-    }
 
-    vm.setHidden = function(article) {
-      article.isHidden = true;
-      article.save();//post(article);
-
-    }
-
-    vm.editArticle = function(id) {
-      console.log('in edit article');
-        $location.path('article/' + id + '/view');
-    }
 
     vm.create = function() {
-        // Create new Article object
-        var article = new Article(vm.article);
+      // Create new Article object
+      var article = new Article(vm.article);
 
-        // Redirect after save
-        article.$save(function(response) {
-          $location.path('article/' + response.id);
-        }, function(errorResponse) {
-          vm.error = errorResponse.data.summary;
-        });
-      }
-      // Remove existing Article
-    vm.remove = function(index, id) {
-      var article = {};
-
-      Article.one(id).get().then(function(data) {
-        article = data;
-        vm.articles.splice(index, 1);
-        article.remove();
+      // Redirect after save
+      article.$save(function(response) {
+        $location.path('article/' + response.id);
+      }, function(errorResponse) {
+        vm.error = errorResponse.data.summary;
       });
-
     }
+
+
+
 
     // Update existing Article
     vm.update = function() {

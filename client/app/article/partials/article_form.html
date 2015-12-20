@@ -1,9 +1,36 @@
-<div class="container col-md-4 col-md-offset-4">
-<form data-ng-submit="vm.task()" novalidate>
-  <h1>Article</h1>
-  <formly-form model="vm.article" fields="vm.articleFields" form="vm.articleForm">
-    <button type="submit" class="btn btn-primary" ng-disabled="vm.articleForm.$invalid">Submit</button>
-  </formly-form>
-</form>
+<div class="container col-md-6 col-md-offset-3">
+  <tabset>
+    <tab heading="Article">
+      <form data-ng-submit="vm.task()" novalidate>
+        <h1>Article</h1>
+        <formly-form fields="vm.articleFields" form="vm.articleForm" model="vm.article">
+          <button class="btn btn-primary" ng-disabled="vm.articleForm.$invalid" type="submit">Submit</button>
+        </formly-form>
+      </form>
+    </tab>
+    <tab heading="Images">
+      <h4>Upload on file select</h4>
+
+      <button ngf-multiple="true"  ng-model="vm.files" ngf-select="vm.uploadFiles($files)" multiple>
+        Select Files
+      </button>
+      <br>
+      <br>Files:
+      <ul>
+        <li ng-repeat="f in vm.files" style="font:smaller">
+          <div ngf-thumbnail="f.name">
+
+          </div>
+          <span>{{f.name}}</span>
+        </li>
+      </ul>
+      <span class="progress" ng-show="vm.progress >= 0">
+        <div ng-bind="vm.progress + '%'" style="width:{{vm.progress*4}}%"></div>
+      </span>
+      <br/>
+       <progressbar max="vm.total" value="dynamic"><span style="color:white; white-space:nowrap;">prog:{{vm.progress}}   total: {{vm.total}}%</span></progressbar>
+      {{vm.errorMsg}}
+    </tab>
+  </tabset>
 
 </div>

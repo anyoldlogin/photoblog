@@ -12,7 +12,9 @@ angular.module('photoblogApp', [
   'formly',
   'formlyBootstrap',
   'restangular',
-  'angularUtils.directives.dirPagination'
+  'angularUtils.directives.dirPagination',
+  'ngFileUpload'
+
 
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
