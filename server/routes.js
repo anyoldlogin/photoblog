@@ -30,7 +30,7 @@ module.exports = function(app) {
 
   app.use('/auth', require('./auth'));
 
-  app.post('/api/photos', upload.any(), function (req, res, next)  {
+  app.post('/uploads', upload.any(), function (req, res, next)  {
   // req.file is the `avatar` file
   // req.body will hold the text fields, if there were any
     console.log('files: ' + JSON.stringify(req.files));

@@ -15,6 +15,12 @@ var ArticleSchema = new Schema({
     comment: String,
     createdAt: { type: Date, default: Date.now },
   }],
+  photos: [{
+    title: String,
+    caption: String,
+    url: String,
+    active: Boolean
+  }],
   createdAt: { type: Date, default: Date.now }
 });
 

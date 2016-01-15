@@ -1,44 +1,75 @@
 (function() {
-  'use strict';
+    'use strict';
 
-  angular.module('photoblogApp')
-    .controller('ArticleController', ArticleController)
-    .controller('ViewArticleController', ViewArticleController)
-    .controller('NewArticleController', NewArticleController)
-    .controller('EditArticleController', EditArticleController);
+    angular.module('photoblogApp')
+      .controller('ArticleController', ArticleController)
+      .controller('ViewArticleController', ViewArticleController)
+      .controller('NewArticleController', NewArticleController)
+      .controller('EditArticleController', EditArticleController);
 
-  //.controller('ArticleController', ArticleListController)
-  //.controller('ArticleController', NewArticleController)
-  //.controller('ArticleController', EditArticleController);
-  var articleFields = [{
-    key: 'title',
-    type: 'input',
-    templateOptions: {
-      type: 'text',
-      label: 'Title',
-      placeHolder: 'Enter the title of the article',
-      required: true
-    }
-  }, {
-    key: 'summary',
-    type: 'input',
-    templateOptions: {
-      type: 'text',
-      label: 'Summary',
-      placeHolder: 'Enter a synopsis of the article',
-      required: true
-    }
-  }, {
-    key: 'content',
-    type: 'textarea',
-    templateOptions: {
-      type: 'text',
-      label: 'Summary',
-      placeHolder: 'Enter a synopsis of the article',
-      required: true
-    }
-  }];
+    //.controller('ArticleController', ArticleListController)
+    //.controller('ArticleController', NewArticleController)
+    //.controller('ArticleController', EditArticleController);
+    var articleFields = [{
+      key: 'title',
+      type: 'input',
+      templateOptions: {
+        type: 'text',
+        label: 'Title',
+        placeHolder: 'Enter the title of the article',
+        required: true
+      }
+    }, {
+      key: 'summary',
+      type: 'input',
+      templateOptions: {
+        type: 'text',
+        label: 'Summary',
+        placeHolder: 'Enter a synopsis of the article',
+        required: true
+      }
+    }, {
+      key: 'content',
+      type: 'textarea',
+      templateOptions: {
+        type: 'text',
+        label: 'Summary',
+        placeHolder: 'Enter a synopsis of the article',
+        required: true
+      }
+    }];
 
+    var photoFields = [{
+        key: 'title',
+        type: 'input',
+        templateOptions: {
+          type: 'text',
+          label: 'Title',
+          placeHolder: 'Enter the title of the photo',
+          required: true
+        }
+      }, {
+        key: 'caption',
+        type: 'input',
+        templateOptions: {
+          type: 'text',
+          label: 'Caption',
+          placeHolder: 'Enter a caption',
+          required: true
+        }
+      }, {
+        key: 'url',
+        type: 'input',
+        templateOptions: {
+          type: 'input',
+          disabled: true,
+          label: 'Url',
+          placeHolder: 'Enter the url of the photo or upload',
+          required: true
+        }
+      }
+
+    ];
   var setVisible = function(article) {
     article.isHidden = false;
     article.save(); //post(article);
@@ -115,49 +146,49 @@
     vm.article = {};
     vm.date = {};
     vm.articleFields = articleFields;
-    vm.files = [];
+    vm.photoFields = photoFields;
+
     vm.progress = 0;
     vm.total = 0;
     vm.errorMag = '';
     vm.result = '';
-
-
+    vm.gridOptions = {
+      enableFiltering: true
+    };
+    vm.gridOptions.data = [];
     vm.pattern = '.tif, .tiff, .gif, .jpeg, jpg, .jif, .jfif, .png';
     vm.task = function update() {
       vm.article.put().then(function() {
         $location.path('/article/' + vm.article._id);
       });
     };
-
+    vm.photos = [];
     vm.uploadFiles = function(files) {
       var id = 0;
-      if(vm.article) {
+      if (vm.article) {
         id = vm.article.uuid || uuid.generate();
-      }
-      else {
+      } else {
         id = uuid.generate();
       }
-      console.log('uuid: ' + id);
-      vm.files = files;
-      console.log('files:  ' + JSON.stringify(vm.files));
+      vm.photos = files;
       if (files && files.length) {
         Upload.upload({
-          url: '/api/photos',
+          url: '/uploads',
           data: {
-            files: vm.files,
+            files: vm.photos,
             uuid: id
           }
         }).then(function(response) {
-          $timeout(function() {
+          //$timeout(function() {
             vm.result = response.data;
-            console.log('data:  ' + JSON.stringify(vm.result));
-          });
+            console.log('fields:' + JSON.stringify(Object.keys(response)));
+            console.log('retured data: ' + JSON.stringify(response.data));
+          //});
         }, function(response) {
           if (response.status > 0) {
             vm.errorMsg = response.status + ': ' + response.data;
           }
         }, function(evt) {
-          console.log('progress: ' + evt.loaded / evt.total);
           vm.total = evt.total;
           vm.progress =
             Math.min(100, parseInt(100.0 * evt.loaded / evt.total));

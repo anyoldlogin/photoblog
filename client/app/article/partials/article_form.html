@@ -8,28 +8,44 @@
         </formly-form>
       </form>
     </tab>
-    <tab heading="Images">
-      <h4>Upload on file select</h4>
+    <tab heading="Photos">
+      <!-- <form data-ng-submit="vm.task()" novalidate>
+        <h1>Photo</h1>
+        <formly-form fields="vm.photoFields" form="vm.photoForm" model="vm.photo">
+          <button class="btn btn-primary" ng-disabled="vm.photoForm.$invalid" type="submit">Submit</button>
+        </formly-form>
+      </form> -->
+      <h1>Photos</h1>
 
-      <button ngf-multiple="true"  ng-model="vm.files" ngf-select="vm.uploadFiles($files)" multiple>
-        Select Files
+      <div ng-hide="vm.photos.length==0">
+
+        Files:
+        <ul>
+          <li ng-repeat="f in vm.photos" style="font:smaller">
+            <div ngf-thumbnail="f.name"></div>
+            <span>{{f.name}}</span>
+          </li>
+        </ul>
+
+      </div>
+      <div ng-show="vm.photos.length==0">
+        No photos associated with this article.
+      </div>
+
+      <button multiple  ngf-multiple="true" ngf-select="vm.uploadFiles($files)">
+        Upload Photos
       </button>
-      <br>
-      <br>Files:
-      <ul>
-        <li ng-repeat="f in vm.files" style="font:smaller">
-          <div ngf-thumbnail="f.name">
-
-          </div>
-          <span>{{f.name}}</span>
-        </li>
-      </ul>
-      <span class="progress" ng-show="vm.progress >= 0">
+      <!-- <span class="progress" ng-show="vm.progress >= 0">
         <div ng-bind="vm.progress + '%'" style="width:{{vm.progress*4}}%"></div>
       </span>
       <br/>
        <progressbar max="vm.total" value="dynamic"><span style="color:white; white-space:nowrap;">prog:{{vm.progress}}   total: {{vm.total}}%</span></progressbar>
-      {{vm.errorMsg}}
+      {{vm.errorMsg}} -->
+
+      <div ng-hide="vm.gridOptions.data.length == 0" style="border-style:solid">
+        <div class="myGrid" ui-grid="vm.gridOptions"></div>
+      </div>
+
     </tab>
   </tabset>
 

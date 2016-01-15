@@ -13,7 +13,8 @@ angular.module('photoblogApp', [
   'formlyBootstrap',
   'restangular',
   'angularUtils.directives.dirPagination',
-  'ngFileUpload'
+  'ngFileUpload',
+  'ui.grid'
 
 
 ])

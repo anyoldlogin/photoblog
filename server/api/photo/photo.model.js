@@ -4,8 +4,9 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var PhotoSchema = new Schema({
-  name: String,
-  info: String,
+  title: String,
+  caption: String,
+  url: String,
   active: Boolean
 });
 
